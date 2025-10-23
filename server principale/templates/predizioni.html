@@ -1,0 +1,33 @@
+document.getElementById('predizioneForm').addEventListener('submit', async function(e) {
+    e.preventDefault();  // evita il reload della pagina
+
+    // Legge i valori dai campi del form
+    const potenza_kw = parseFloat(document.getElementById('potenza_kw').value);
+    const numero_ricariche = parseInt(document.getElementById('numero_ricariche').value);
+    const energia_totale_kwh = parseFloat(document.getElementById('energia_totale_kwh').value);
+
+    try {
+        // Chiamata POST al server predizioni
+        const response = await fetch('http://localhost:5001/predizione_colonnina', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ potenza_kw, numero_ricariche, energia_totale_kwh })
+        });
+
+        const data = await response.json();
+        const risultatoDiv = document.getElementById('risultato');
+
+        if(data.predizione){
+            risultatoDiv.textContent = `Predizione utilizzo: ${data.predizione}`;
+            risultatoDiv.classList.remove('d-none', 'alert-danger');
+            risultatoDiv.classList.add('alert-info');
+        } else if(data.error){
+            risultatoDiv.textContent = `Errore: ${data.error}`;
+            risultatoDiv.classList.remove('d-none', 'alert-info');
+            risultatoDiv.classList.add('alert-danger');
+        }
+
+    } catch (err) {
+        alert('Errore nella connessione al server: ' + err);
+    }
+});
