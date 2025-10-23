@@ -1,0 +1,9 @@
+| Tabella          | Descrizione                  | Chiave primaria | Relazioni principali             |
+| ---------------- | ---------------------------- | --------------- | -------------------------------- |
+| `amministratori` | Dati amministratori          | id_admin        | gestisce colonnine               |
+| `utenti`         | Dati anagrafici utenti       | id_utente       | 1:N con `auto`, `ricariche`      |
+| `auto`           | Dati veicoli utenti          | id_auto         | FK → `utenti`                    |
+| `colonnine`      | Dati colonnine di ricarica   | id_colonnina    | FK → `amministratori`            |
+| `ricariche`      | Log di ricariche effettuate  | id_ricarica     | FK → `colonnine`, `auto`         |
+| `sessioni_login` | Log di sessioni utente/admin | id_sessione     | FK → `utenti` o `amministratori` |
+| `predizioni`     | Previsioni utilizzo future   | id_predizione   | FK → `colonnine`                 |
