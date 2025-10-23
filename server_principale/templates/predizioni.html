@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predizione Utilizzo Colonnina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Predizione Utilizzo Colonnina</h2>
+    <form id="predizioneForm">
+        <div class="mb-3">
+            <label for="potenza_kw" class="form-label">Potenza (kW)</label>
+            <input type="number" class="form-control" id="potenza_kw" required>
+        </div>
+        <div class="mb-3">
+            <label for="numero_ricariche" class="form-label">Numero Ricariche</label>
+            <input type="number" class="form-control" id="numero_ricariche" required>
+        </div>
+        <div class="mb-3">
+            <label for="energia_totale_kwh" class="form-label">Energia Totale (kWh)</label>
+            <input type="number" step="0.1" class="form-control" id="energia_totale_kwh" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Predici</button>
+    </form>
+
+    <div id="risultato" class="mt-4 alert d-none"></div>
+</div>
+
+<script>
+document.getElementById('predizioneForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const potenza_kw = parseFloat(document.getElementById('potenza_kw').value);
+    const numero_ricariche = parseInt(document.getElementById('numero_ricariche').value);
+    const energia_totale_kwh = parseFloat(document.getElementById('energia_totale_kwh').value);
+
+    try {
+        const response = await fetch('http://localhost:5001/predizione_colonnina', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ potenza_kw, numero_ricariche, energia_totale_kwh })
+        });
+
+        const data = await response.json();
+        const risultatoDiv = document.getElementById('risultato');
+
+        if(data.predizione){
+            risultatoDiv.textContent = `Predizione utilizzo: ${data.predizione}`;
+            risultatoDiv.classList.remove('d-none', 'alert-danger');
+            risultatoDiv.classList.add('alert-info');
+        } else if(data.error){
+            risultatoDiv.textContent = `Errore: ${data.error}`;
+            risultatoDiv.classList.remove('d-none', 'alert-info');
+            risultatoDiv.classList.add('alert-danger');
+        }
+
+    } catch (err) {
+        alert('Errore nella connessione al server: ' + err);
+    }
+});
+</script>
+</body>
+</html>
