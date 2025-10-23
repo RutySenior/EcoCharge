@@ -1,9 +1,9 @@
-| Tabella          | Descrizione                  | Chiave primaria | Relazioni principali             |
-| ---------------- | ---------------------------- | --------------- | -------------------------------- |
-| `amministratori` | Dati amministratori          | id_admin        | gestisce colonnine               |
-| `utenti`         | Dati anagrafici utenti       | id_utente       | 1:N con `auto`, `ricariche`      |
-| `auto`           | Dati veicoli utenti          | id_auto         | FK → `utenti`                    |
-| `colonnine`      | Dati colonnine di ricarica   | id_colonnina    | FK → `amministratori`            |
-| `ricariche`      | Log di ricariche effettuate  | id_ricarica     | FK → `colonnine`, `auto`         |
-| `sessioni_login` | Log di sessioni utente/admin | id_sessione     | FK → `utenti` o `amministratori` |
-| `predizioni`     | Previsioni utilizzo future   | id_predizione   | FK → `colonnine`                 |
+| **Tabella**        | **Descrizione**                                                | **Chiave primaria** | **Attributi principali**                                                                                 | **Relazioni principali**                                                  |
+| ------------------ | -------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **amministratori** | Dati anagrafici e credenziali degli amministratori del sistema | `id_admin`          | nome, cognome, email, password_hash, data_creazione                                                      | 1:N con **colonnine** (ogni amministratore gestisce più colonnine)        |
+| **utenti**         | Dati anagrafici e di accesso degli utenti registrati           | `id_utente`         | nome, cognome, email, telefono, password_hash, data_registrazione                                        | 1:N con **auto**, 1:N con **ricariche**, 1:N con **sessioni_login**       |
+| **auto**           | Dati dei veicoli associati a ciascun utente                    | `id_auto`           | id_utente (FK), marca, modello, targa, capacita_batteria_kwh, potenza_massima_kw                         | N:1 con **utenti**, 1:N con **ricariche**                                 |
+| **colonnine**      | Informazioni sulle colonnine di ricarica pubbliche             | `id_colonnina`      | id_admin (FK), indirizzo, quartiere, nil, latitudine, longitudine, potenza_kw, data_installazione, stato | N:1 con **amministratori**, 1:N con **ricariche**, 1:N con **predizioni** |
+| **ricariche**      | Log delle ricariche effettuate dagli utenti                    | `id_ricarica`       | id_colonnina (FK), id_auto (FK), data_inizio, data_fine, energia_erogata_kwh, costo                      | N:1 con **colonnine**, N:1 con **auto**                                   |
+| **sessioni_login** | Log delle sessioni di accesso di utenti e amministratori       | `id_sessione`       | id_utente (FK), id_admin (FK), token, data_accesso, ip_address, scadenza                                 | N:1 con **utenti** o **amministratori**                                   |
+| **predizioni**     | Dati previsionali sull’utilizzo futuro delle colonnine         | `id_predizione`     | id_colonnina (FK), data_predizione, richiesta_prevista, energia_prevista_kwh, modello, data_creazione    | N:1 con **colonnine**                                                     |
