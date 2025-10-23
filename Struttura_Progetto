@@ -1,0 +1,29 @@
+ecocharge/
+├─ backend/
+│  ├─ package.json
+│  ├─ knexfile.js
+│  ├─ migrations/ (sql migrazioni)
+│  ├─ src/
+│  │  ├─ server.js
+│  │  ├─ db.js
+│  │  ├─ auth.js
+│  │  ├─ routes/
+│  │  │  ├─ auth.routes.js
+│  │  │  ├─ stations.routes.js
+│  │  │  ├─ admin.routes.js
+│  │  │  ├─ reservations.routes.js
+│  │  │  └─ reports.routes.js
+│  │  └─ middleware/
+│  │     └─ auth.middleware.js
+│  └─ .env.example
+└─ frontend/
+   ├─ package.json
+   ├─ src/
+   │  ├─ App.jsx
+   │  ├─ index.jsx
+   │  ├─ pages/
+   │  │  ├─ MapPage.jsx
+   │  │  └─ Login.jsx
+   │  └─ services/
+   │     └─ api.js
+   └─ public/
